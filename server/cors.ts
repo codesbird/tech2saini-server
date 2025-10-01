@@ -1,14 +1,18 @@
 import cors from 'cors';
 
 const allowedOrigins = [
-  'https://tech2saini.vercel.app/',
-  'http://localhost:5173', // Vite default
-  'http://localhost:5174/',
-  'http://localhost:3000', // Common React dev port
-  // Add other origins if needed
+  'https://tech2saini.vercel.app',
+  'http://localhost:5173',
 ];
 
 export const corsMiddleware = cors({
-  origin: allowedOrigins,
-  credentials: true,
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser requests like Postman
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // allow cookies
 });
