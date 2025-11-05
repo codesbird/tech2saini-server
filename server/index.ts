@@ -9,7 +9,11 @@ const app = express();
 app.use(corsMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-console.log("environments :",process.env.SUPABASE_ANON_KEY)
+
+// Health check endpoint
+app.get('/health', (_, res) => {
+  res.status(200).json({ status: 'healthy' });
+});
 
  
 app.use((req, res, next) => {

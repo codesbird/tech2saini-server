@@ -7,7 +7,7 @@ import speakeasy from "speakeasy";
 import QRCode from "qrcode";
 import { storage } from "./storage";
 import { User, loginUserSchema, insertUserSchema } from "@shared/schema";
-import MemoryStore from "memorystore";
+import memorystore from "memorystore";
 import { supabaseAdmin } from "./supabase";
 import { sendPasswordResetEmail } from "./email";
 import crypto from "crypto";
@@ -24,7 +24,8 @@ declare global {
   }
 }
 
-const MemStore = MemoryStore(session);
+
+const MemoryStore = memorystore(session);
 
 async function hashPassword(password: string): Promise<string> {
   return await bcrypt.hash(password, 12);
@@ -52,7 +53,7 @@ export function setupAuth(app: Express) {
     secret: process.env.SESSION_SECRET || "tech2saini-secret-key",
     resave: false,
     saveUninitialized: false,
-    store: new MemStore({
+    store: new MemoryStore({
       checkPeriod: 86400000, // prune expired entries every 24h
     }),
     cookie: {
